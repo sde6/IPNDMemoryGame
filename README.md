@@ -4,7 +4,7 @@ TL; DR:
 -Open MemoryGame.html in a browser
 
 Summary:
-This Memory game was a project for the front end section of Udacity's into to programming nano degree
+This Memory game was a project for the front end section of Udacity's intro to programming nano degree
 
 File Description:
 MemoryGame.html - webpage structure for game
