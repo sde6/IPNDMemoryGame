@@ -168,7 +168,7 @@ function win() {
     //pulls game durations from timer
     timeInS = document.getElementById("timer").innerHTML; 
     //Information pop-up
-    alert("You Won in "+moveCount+"moves.\n It took "+ timeInS +".");
+    alert("You Won in "+moveCount+"moves.\n It took "+ timeInS +".\n\nIf you'd like to play again simply hit the restart button");
 }
 
 //checks to see if match count equals all possible matches
