@@ -13,7 +13,9 @@ var iconPaths = [
 
 startGame();
 
-//sets initial values for global conditions
+/**
+* @description sets initial values for global conditions
+*/
 function resetConditions(){
     //set variables intial values
     moveCount = 0;
@@ -29,7 +31,11 @@ function resetConditions(){
     updateMoves(0);
 }//end reserConditions
 
-//creates an object for cardDetails
+/**
+* @description creates an object for cardDetails
+* @param {object} element html element of class card
+* @returns {object} assigned details of card
+*/
 function newCardObject(element){
     var cardDetails = {
         cardHTMLElement: element,
@@ -61,7 +67,9 @@ function newCardObject(element){
     return(cardDetails);
 }
 
-//game setup
+/**
+* @description sets initial values and assigns event listeners
+*/
 function startGame() {
     //create card array
     cards = [[], []];
@@ -89,33 +97,32 @@ function startGame() {
 
 }
 
-//resets state of game and assigns new values to each card
+
+/**
+* @description resets state of game and assigns new values to each card
+*/
 function restartGame(){
     //reset variables
-    startTime = stopWatch(0);
-    moveCount = 0;
-    matchCount = 0;
-    availableValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
-    faceUpCards = [];
-
-    //update HTML
-    updateMoves(0);
-    timer = setInterval(updateTime,1000);
-
-    //reset cards details
+    resetConditions();
+    //for each card reset cards details
     for (var i = 0, len = cards[0].length; i < len; i++){
         cards[1][i].reset();
     }
 }
 
-//randomly hands out available values
+/**
+* @description creates an object for cardDetails
+* @returns {number} value of card used for match comparison
+*/
 function assignValue() {
     var random = Math.floor(Math.random() * (availableValues.length - 1));
     var valueToAssign = availableValues.splice(random, 1);
     return (valueToAssign[0]);
 }
 
-//calls flip on card object then checks match if two cards are faceup
+/**
+* @description calls flip on card object then checks match if two cards are faceup
+*/
 function flipCard(cardHTMLElement) {
     var card = getCardDetails(cardHTMLElement);
     if (!card.isMatched) {
@@ -128,7 +135,11 @@ function flipCard(cardHTMLElement) {
     }
 }
 
-//looks up card object based on html element
+/**
+* @description looks up card object based on html element
+* @param {object} cardHTMLElement element of class card 
+* @returns {object} assigned card details associated with html element of class card
+*/
 function getCardDetails(cardHTMLElement) {
     var indexOfDetails = cards[0].indexOf(cardHTMLElement);
     if (indexOfDetails > -1) {
@@ -137,8 +148,9 @@ function getCardDetails(cardHTMLElement) {
     return -1;
 }
 
-//checks if the face up cards match
-//updates match of flips the cards back over
+/**
+* @description checks if the face up cards match then updates match of flips the cards back over
+*/
 function checkMatch() {
     //removes cards from list of face up cards
     var cardOne = faceUpCards.pop();
@@ -161,7 +173,9 @@ function checkMatch() {
     updateMoves(1);
 }
 
-//stops timer, alerts user they won, and displays user stats
+/**
+* @description stops timer, alerts user they won, and displays user stats
+*/
 function win() {
     //stops timer
     window.clearInterval(timer);
@@ -171,12 +185,17 @@ function win() {
     alert("You Won in "+moveCount+"moves.\n It took "+ timeInS +".\n\nIf you'd like to play again simply hit the restart button");
 }
 
-//checks to see if match count equals all possible matches
+/**
+* @description checks to see if match count equals all possible matches
+*/
 function checkWin() {
     return (matchCount >= cards[0].length / 2);
 }
 
-//increments movesCount by numToAdd & updates the HTML span showing num moves
+/**
+* @description increments movesCount by numToAdd & updates the HTML span showing num moves
+* @param {number} numToAdd 
+*/
 function updateMoves(numToAdd) {
     moveCount += numToAdd;
     numMoves = document.getElementById("numMoves")
@@ -185,7 +204,9 @@ function updateMoves(numToAdd) {
     updateStars();
 }
 
-//determines the star ranking based on moves made and updates html span approapriately
+/**
+* @description determines the star ranking based on moves made and updates html span approapriately
+*/
 function updateStars(){
     starString='Rating : ***';
     if (moveCount > 9 && moveCount < 14){
@@ -197,13 +218,19 @@ function updateStars(){
     stars.innerHTML = starString;
 }
 
-//gets the timer span and upates it with the current duration
+/**
+* @description gets the timer span and upates it with the current duration
+*/
 function updateTime(){
     durationInS = Math.floor(stopWatch(startTime)/(10*10*10));
     document.getElementById("timer").innerHTML = durationInS + " s";
 }
 
-//returns current time minus time argument; time in ms
+/**
+* @description gives the difference between input time and current time
+* @param {number} time assumes to be time in past or 0
+* @returns {object} returns time difference in ms
+*/
 function stopWatch(time){
     var d = new Date();
     var timeNow = d.getTime();
