@@ -1,6 +1,11 @@
 body {
     background: white;
     text-align: center;
+    font-family: 'Jaldi', sans-serif;
+}
+
+h1{
+    font-size: calc(30px + 1.5vw);
 }
 
 span{
