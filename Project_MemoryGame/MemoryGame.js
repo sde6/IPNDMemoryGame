@@ -13,66 +13,78 @@ var iconPaths = [
 
 startGame();
 
-//game setup
-function startGame() {
+//sets initial values for global conditions
+function resetConditions(){
     //set variables intial values
-    cards = [[], []];
-    faceUpCards = [];
     moveCount = 0;
     matchCount = 0;
     availableValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
+    faceUpCards = [];
 
     //start timer
     startTime = stopWatch(0);
+    timer = setInterval(updateTime,1000);
 
     //set HTML showing moves
     updateMoves(0);
-    timer = setInterval(updateTime,1000);
+}//end reserConditions
 
-    //get's all the cards being shown
-    cardClassElements = document.getElementsByClassName("card");
+//creates an object for cardDetails
+function newCardObject(element){
+    var cardDetails = {
+        cardHTMLElement: element,
+        cardValue: assignValue(),
+        isMatched: false,
+        isflipped: false,
+        //updates card details when card is flipped
+        flipCard: function () {
+            this.cardHTMLElement.classList.toggle('flipped');
+            this.cardHTMLElement.innerHTML = this.isflipped ? "" : '<img src=' + iconPaths[(this.cardValue - 1)] + '>';
+            this.isflipped = this.isflipped ? false : true;
+
+        },
+        //updates card details when card is matched
+        match: function () {
+            this.isMatched = true;
+            this.cardHTMLElement.classList.add('matched')
+        },
+        //resets the card details and html
+        reset: function(){
+            this.cardValue = assignValue();
+            this.isflipped = false;
+            this.cardHTMLElement.classList.remove('flipped');
+            this.isMatched = false;
+            this.cardHTMLElement.classList.remove('matched');
+            this.cardHTMLElement.innerHTML = "";
+        }   
+    };
+    return(cardDetails);
+}
+
+//game setup
+function startGame() {
+    //create card array
+    cards = [[], []];
+    //setConditions for new game
+    resetConditions();
+
+    //get's all the cards elements from the DOM
+    var cardClassElements = document.getElementsByClassName("card");
 
     //creates cardDetails object and adds to cards array at same index in second array as the html element
     for (var i = 0, len = cardClassElements.length; i < len; i++) {
-        var cardDetails = {
-            cardHTMLElement: cardClassElements[i],
-            cardValue: assignValue(),
-            isMatched: false,
-            isflipped: false,
-            //updates card details when card is flipped
-            flipCard: function () {
-                this.cardHTMLElement.classList.toggle('flipped');
-                this.cardHTMLElement.innerHTML = this.isflipped ? "" : '<img src=' + iconPaths[(this.cardValue - 1)] + '>';
-                this.isflipped = this.isflipped ? false : true;
+        cardDetails = newCardObject(cardClassElements[i]);
 
-            },
-
-            //updates card details when card is matched
-            match: function () {
-                this.isMatched = true;
-                this.cardHTMLElement.classList.add('matched')
-            },
-
-            reset: function(){
-                this.cardValue = assignValue();
-                this.isflipped = false;
-                this.cardHTMLElement.classList.remove('flipped');
-                this.isMatched = false;
-                this.cardHTMLElement.classList.remove('matched');
-                this.cardHTMLElement.innerHTML = "";
-            }   
-
-        };
         //Adds click listener and value to all card elements
         cardClassElements[i].addEventListener("click", function () {
             flipCard(this);
         });
         
-
+        //adds new pair to the double array at next index in each respectively 
         cards[0].push(cardClassElements[i]);
         cards[1].push(cardDetails);
     }
-
+    //Adds click listner to refreshIcon
     document.getElementById("refreshIcon").addEventListener("click", function () { restartGame() });
 
 }
